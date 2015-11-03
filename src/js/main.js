@@ -1,6 +1,38 @@
 
 class HomePage extends React.Component {
+
+	constructor() {
+		super();
+
+		this.state = {
+			messsages: []
+		};
+	}
+
+	componentDidMount() {
+
+		$.get('/messages', function(messages) {
+
+			this.setState({
+				messages: messages
+			});
+		}.bind(this));
+	}
+
 	render() {
+		var list = [];
+
+		for (var index in this.state.messages) {
+			var msg = this.state.messages[index];
+
+			list.push(
+				<div className='ui segment'>
+					<div className='ui red ribbon label'>{msg.name}</div>
+					<div>{msg.msg}</div>
+				</div>
+			);
+		}
+
 		return (
 			<div className='ui padded basic segment'>
 				<h1 className='ui center aligned icon header'>
@@ -14,6 +46,7 @@ class HomePage extends React.Component {
 						<span>Leave Message</span>
 					</a>
 				</div>
+				{list}
 			</div>
 		);
 	}
