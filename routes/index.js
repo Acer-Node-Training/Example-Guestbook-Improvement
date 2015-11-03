@@ -35,4 +35,9 @@ router.post('/post', function(req, res, next) {
 	res.redirect('/');
 });
 
+// Get Message API
+router.get('/messages', function(req, res, next) {
+	res.json(messages);
+});
+
 module.exports = router;
