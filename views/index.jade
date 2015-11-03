@@ -1,19 +1,6 @@
 extends layout
 
 block content
-	div.ui.padded.basic.segment
-		h1.ui.center.aligned.icon.header
-			i.comments.icon
-			div.content GuestBook
-				div.sub.header Leave message whatever you want
-		div.ui.olive.item.menu
-			a.item(href='/post')
-				i.mail.icon
-				span Leave Message
 
-		- for (var index in messages)
-			div.ui.segment
-				div.ui.red.ribbon.label #{messages[index].name}
-				div #{messages[index].msg}
-
+	div#app
 	script(src='/js/bundle.js')
