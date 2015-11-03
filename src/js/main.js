@@ -1,4 +1,27 @@
+import Fluky from 'fluky';
 
+// Actions
+Fluky.on('action.Guestbook.sync', function *() {
+
+	$.get('/messages', function(messages) {
+
+		Fluky.dispatch('store.Guestbook.updateMessages', messages);
+	});
+
+});
+
+// Stores
+var state = Fluky.getState('Guestbook', {
+	messages: []
+});
+
+Fluky.on('store.Guestbook.updateMessages', function *(messages) {
+	state.messages = messages;
+
+	Fluky.dispatch('state.Guestbook');
+});
+
+// React Component
 class HomePage extends React.Component {
 
 	constructor() {
@@ -9,14 +32,24 @@ class HomePage extends React.Component {
 		};
 	}
 
+	componentWillMount() {
+		Fluky.on('state.Guestbook', Fluky.bindListener(this.onChange.bind(this)));
+	}
+
 	componentDidMount() {
+		Fluky.dispatch('action.Guestbook.sync');
+	}
 
-		$.get('/messages', function(messages) {
+	componentWillUnmount() {
+		Fluky.off('state.Guestbook', this.onChange);
+	}
 
-			this.setState({
-				messages: messages
-			});
-		}.bind(this));
+	onChange() {
+		var store = Fluky.getState('Guestbook');
+
+		this.setState({
+			messages: store.messages
+		});
 	}
 
 	render() {
